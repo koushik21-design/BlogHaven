@@ -1,5 +1,25 @@
 /* stylelint-disable selector-list-comma-newline-after */
 
+body {
+  height: 100vh;
+  margin: 0;
+  background: linear-gradient(-45deg, #f0f2f5, #e0e7ff, #d9e2ec, #ffffff);
+  background-size: 400% 400%;
+  animation: gradientBG 15s ease infinite;
+}
+
+@keyframes gradientBG {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
 .blog-header {
   border-bottom: 1px solid #e5e5e5;
 }
