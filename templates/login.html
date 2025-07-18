@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<h3 class="text-center">Login</h3>
+<form method="POST" action="{% url "login" %}" style="width:500px; margin:auto;">
+    {% csrf_token %}
+    {{uform | crispy}}
+    <button type="submit" class="btn btn-warning w-100">Submit</button>
+</form>
+{% endblock  %}

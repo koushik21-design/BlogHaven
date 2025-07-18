@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<h3 class="text-uppercase text-success text-center" style="letter-spacing:2px;">Keyword-{{keyword}}</h3>
+<div class="row mb-2">
+    {% if blogs %}
+    {% for post in blogs %}
+    <div class="col-md-6">
+      <div class="card border-0" >
+        <div class="card-body">
+          <a href="{% url 'blogs' post.slug %}" class="text-danger"><h3>{{post.title}}</h3></a>
+          <small class="mb-1 text-muted">{{post.created_at | timesince}}<br>{{post.author}}</small>
+          <figure class="mb-4"><img class="img-fluid rounded" src="{{post.featured_image.url}}" alt="..." /></figure>
+          <p class="card-text">{{post.short_description}}</p>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <p><h3>No Posts Found</h3></p>
+    {% endif %}
+</div>
+{% endblock  %}
