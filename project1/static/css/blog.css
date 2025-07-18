@@ -1,25 +1,5 @@
 /* stylelint-disable selector-list-comma-newline-after */
 
-body {
-  height: 100vh;
-  margin: 0;
-  background: linear-gradient(-45deg, #f0f2f5, #e0e7ff, #d9e2ec, #ffffff);
-  background-size: 400% 400%;
-  animation: gradientBG 15s ease infinite;
-}
-
-@keyframes gradientBG {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
 .blog-header {
   border-bottom: 1px solid #e5e5e5;
 }
@@ -86,4 +66,18 @@ h1, h2, h3, h4, h5, h6 {
 }
 .blog-footer p:last-child {
   margin-bottom: 0;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: linear-gradient(-45deg, #f0f2f5, #d9e2ec, #e0e7ff, #ffffff) !important;
+  background-size: 400% 400%;
+  animation: gradientBG 15s ease infinite;
+}
+
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
