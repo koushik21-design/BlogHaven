@@ -37,3 +37,20 @@ class Comment(models.Model):
     updated_at=models.DateTimeField(auto_now=True)
     def __str__(self):
         return self.comment
+    
+class Like(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    blog = models.ForeignKey(Blog, related_name='likes', on_delete=models.CASCADE)
+    class Meta:
+        unique_together = ('user', 'blog')
+    def __str__(self):
+        return f'{self.user.username} likes {self.blog.title}'
+    
+class Dislike(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    blog = models.ForeignKey(Blog, related_name='dislikes', on_delete=models.CASCADE)
+    class Meta:
+        unique_together = ('user', 'blog')
+
+    def __str__(self):
+        return f'{self.user.username} dislikes {self.blog.title}'

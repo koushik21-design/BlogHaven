@@ -25,10 +25,12 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('',views.home,name='home'),
     path('category/',include('blog.urls')),
-    path('blogs<slug:slug>/',BlogsView.blogs,name='blogs'),
+    path('blogs/<slug:slug>/',BlogsView.blogs,name='blogs'),
     path('blogs/search/',BlogsView.search,name='search'),
     path('register/',views.register,name='register'),
     path('login/',views.login,name='login'),
     path('logout/',views.logout,name='logout'),
     path('dashboard/',include('dashboards.urls')),
+    path('blog/<slug:slug>/like/', BlogsView.like_post, name='like_post'),
+    path('blog/<slug:slug>/dislike/', BlogsView.dislike_post, name='dislike_post'),
 ]+static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

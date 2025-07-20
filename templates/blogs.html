@@ -46,6 +46,18 @@
                                 <input type="submit" value="submit" class="btn btn-primary mt-2">
                             </div>
                         </form>
+                        <form action="{% url 'like_post' single_blog.slug %}" method="post" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-success">
+                                👍 Like ({{ likes_count }})
+                            </button>
+                        </form>
+                        <form action="{% url 'dislike_post' single_blog.slug %}" method="post" style="display:inline;">
+                          {% csrf_token %}
+                          <button type="submit" class="btn btn-danger">
+                            👎 Dislike ({{ dislikes_count }})
+                          </button>
+                        </form>
                     </div>
                 </section>
             </article>

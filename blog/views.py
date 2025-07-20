@@ -1,6 +1,7 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from django.http import HttpResponseRedirect
-from blog.models import Blog, Category, Comment
+from blog.models import Blog, Category, Comment, Like,Dislike
+from django.contrib.auth.decorators import login_required
 
 from django.db.models import Q
 
@@ -19,6 +20,7 @@ def posts_by_category(request,category_id):
     }
     return render(request,'posts_by_category.html',context)
 
+@login_required
 def blogs(request,slug):
     single_blog=get_object_or_404(Blog,slug=slug,status='Published')
     if request.method=='POST':
@@ -27,15 +29,53 @@ def blogs(request,slug):
         comment.blog=single_blog
         comment.comment=request.POST['comment']
         comment.save()
+        if Like.objects.filter(blog=single_blog, user=request.user).exists():
+            Like.objects.filter(blog=single_blog, user=request.user).delete()
+        else:
+            Like.objects.create(blog=single_blog, user=request.user)
+            Dislike.objects.filter(blog=single_blog, user=request.user).delete()
         return HttpResponseRedirect(request.path_info)
+    
     comments=Comment.objects.filter(blog=single_blog)
     comment_count=comments.count()
+    likes_count=single_blog.likes.count()
+    dislikes_count=single_blog.dislikes.count()
     context={
         'single_blog':single_blog,
         'comments':comments,
-        'comment_count':comment_count
+        'comment_count':comment_count,
+        'likes_count':likes_count,
+        'dislikes_count':dislikes_count,
     }
     return render(request,'blogs.html',context)
+
+@login_required
+def like_post(request, slug):
+    single_blog = get_object_or_404(Blog, slug=slug, status='Published')
+    user = request.user
+
+    if Like.objects.filter(blog=single_blog, user=user).exists():
+        Like.objects.filter(blog=single_blog, user=user).delete()
+    else:
+        Like.objects.create(blog=single_blog, user=user)
+        Dislike.objects.filter(blog=single_blog, user=user).delete()
+
+    return redirect('blogs', slug=slug)
+
+@login_required
+def dislike_post(request, slug):
+    single_blog = get_object_or_404(Blog, slug=slug, status='Published')
+    user = request.user
+
+    if Dislike.objects.filter(blog=single_blog, user=user).exists():
+        Dislike.objects.filter(blog=single_blog, user=user).delete()
+    else:
+        Dislike.objects.create(blog=single_blog, user=user)
+        Like.objects.filter(blog=single_blog, user=user).delete()
+
+    return redirect('blogs', slug=slug)
+
+
 
 def search(request):
     keyword=request.GET.get('keyword')
