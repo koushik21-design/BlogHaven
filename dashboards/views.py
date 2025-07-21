@@ -1,9 +1,10 @@
 from django.shortcuts import get_object_or_404, render,redirect
 from django.contrib.auth.decorators import login_required
-from blog.models import Category,Blog
+from blog.models import Category,Blog,Like,Dislike
 from dashboards.forms import CategoryForm,BlogPostForm,AddUserForm,EditUserForm
 from django.template.defaultfilters import slugify
 from django.contrib.auth.models import User
+from django.db.models import Count
 
 @login_required(login_url='login')
 def dashboard(request):
@@ -49,9 +50,12 @@ def delete_category(request,pk):
     return redirect('categories')
 
 def posts(request):
-    posts=Blog.objects.all()
-    context={
-        'posts':posts,
+    posts = Blog.objects.annotate(
+        like_count=Count('likes'),
+        dislike_count=Count('dislikes')
+    )
+    context = {
+        'posts': posts,
     }
     return render(request,'dashboard/posts.html',context)
 
