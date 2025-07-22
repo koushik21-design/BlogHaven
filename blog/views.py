@@ -2,6 +2,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.http import HttpResponseRedirect
 from blog.models import Blog, Category, Comment, Like,Dislike
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 
 from django.db.models import Q
 
@@ -78,10 +79,22 @@ def dislike_post(request, slug):
 
 
 def search(request):
-    keyword=request.GET.get('keyword')
-    blogs=Blog.objects.filter(Q(title__icontains=keyword)|Q(blog_body__icontains=keyword),status='Published')
-    context={
-        'blogs':blogs,
-        'keyword':keyword
+    keyword = request.GET.get('keyword')
+    blogs = Blog.objects.none()
+
+    if keyword:
+        blogs = Blog.objects.filter(
+            Q(title__icontains=keyword) | Q(blog_body__icontains=keyword),
+            status='Published'
+        ).order_by('-created_at')
+
+    paginator = Paginator(blogs, 10)  # 10 results per page
+    page = request.GET.get('page')
+    blogs = paginator.get_page(page)
+
+    context = {
+        'blogs': blogs,
+        'keyword': keyword
     }
-    return render(request,'search.html',context)
+    return render(request, 'search.html', context)
+
